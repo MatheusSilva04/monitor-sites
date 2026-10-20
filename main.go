@@ -15,13 +15,18 @@ func main() {
 		{Url: "", Intervalo: 0},
 	}
 
-	for _, site := range sites {
-		err := validar(site)
-		if err != nil {
-			fmt.Println("site invalido:", err)
-			continue
+	agenda := indexar(sites)
+	fmt.Println(len(agenda))
+
+	buscas := []string{"www.matheus.teste2.go", "www.naoexiste.go"}
+
+	for _, busca := range buscas {
+		site, ok := agenda[busca]
+		if ok {
+			fmt.Println("Site encontrado:", descrever(site))
+		} else {
+			fmt.Println("Site nao encontrado:", busca)
 		}
-		fmt.Println(descrever(site))
 	}
 }
 
@@ -42,4 +47,17 @@ func validar(site Site) error {
 		return fmt.Errorf("intervalo invalido: %d", site.Intervalo)
 	}
 	return nil
+}
+
+func indexar(sites []Site) map[string]Site {
+	agenda := make(map[string]Site)
+
+	for _, site := range sites {
+		err := validar(site)
+		if err != nil {
+			continue
+		}
+		agenda[site.Url] = site
+	}
+	return agenda
 }
