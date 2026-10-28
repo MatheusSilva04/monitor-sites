@@ -23,15 +23,25 @@ func main() {
 	for _, busca := range buscas {
 		site, ok := agenda[busca]
 		if ok {
-			fmt.Println("Site encontrado:", descrever(site))
+			fmt.Println("Site encontrado:", site.Descrever())
 		} else {
 			fmt.Println("Site nao encontrado:", busca)
 		}
 	}
+	teste := Site{Url: "www.matheus.teste1.go", Intervalo: 10}
+	fmt.Println(teste.Descrever())
+	teste.AlterarIntervalo(99)
+	fmt.Println(teste.Descrever())
 }
 
-func descrever(site Site) string {
-	return fmt.Sprintf("%s sera checado a cada %d segundos", site.Url, site.Intervalo)
+func (s Site) Descrever() string {
+	return fmt.Sprintf("%s sera checado a cada %d segundos", s.Url, s.Intervalo)
+}
+
+func (s *Site) AlterarIntervalo(segundos int) {
+	if segundos > 0 {
+		s.Intervalo = segundos
+	}
 }
 
 type Site struct {
